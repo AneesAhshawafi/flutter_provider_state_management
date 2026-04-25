@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'widgetchild.dart';
 void main() {
   runApp(const MainApp());
 }
@@ -190,49 +190,210 @@ class MainApp extends StatefulWidget {
 //   }
 // }
 
-//lesson 5 : Provider.of is a method provided by the Provider package in Flutter that allows you to access the nearest instance of a provider in the widget tree.
-//It is used to retrieve the current value of a provider and listen for changes to that value.
-//When you call Provider.of<T>(context), it looks up the widget tree for the nearest ancestor that provides an instance of type T and returns it.
-//If no such provider is found, it throws an error.
-//This method is commonly used to access the state or functionality provided by a provider within a widget.
+// //lesson 5 : Provider.of is a method provided by the Provider package in Flutter that allows you to access the nearest instance of a provider in the widget tree.
+// //It is used to retrieve the current value of a provider and listen for changes to that value.
+// //When you call Provider.of<T>(context), it looks up the widget tree for the nearest ancestor that provides an instance of type T and returns it.
+// //If no such provider is found, it throws an error.
+// //This method is commonly used to access the state or functionality provided by a provider within a widget.
+// class _MainAppState extends State<MainApp> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: Scaffold(
+//         body: Column(
+//           children: [
+//             SizedBox(height: 100),
+
+//             ChangeNotifierProvider(
+//               create: (context) => Model(),
+//               child: Center(child: Text("Hello, Provider!")),
+//             ),
+//             SizedBox(height: 20),
+//             // //Consumer widget must be used inside the provider widget
+//             // Consumer<Model>(
+//             //   builder: (context, model, child) {
+//             //     return Text(model.text);
+//             //   },
+//             // ),
+//             MaterialButton(
+//               color: Colors.blue,
+//               textColor: Colors.white,
+//               onPressed: () {},
+//               child: Text("Press Me"),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class Model extends ChangeNotifier {
+//   String text = 'Hello World';
+//   changeName() {
+//     text = 'Hello Flutter';
+//     notifyListeners();
+//   }
+// }
+
+// // Lesson 5 (scope providers),6(Provider.of(context))  , 7(context.watch() and context.read()): 
+////scope providers are a way to limit the visibility of a provider to a specific part of the widget tree. This is useful when you want to provide different instances of a provider for different sections of your app or when you want to avoid unnecessary rebuilds of widgets that do not depend on a particular provider.
+// // By using scope providers, you can ensure that only the widgets that need access to a specific provider will rebuild when that provider's state changes, improving the performance of your Flutter application.
+// // Provider.of(context) is a method provided by the Provider package in Flutter that allows you to access the nearest instance of a provider in the widget tree. It is used to retrieve the current value of a provider and listen for changes to that value. When you call Provider.of<T>(context), it looks up the widget tree for the nearest ancestor that provides an instance of type T and returns it. If no such provider is found, it throws an error. This method is commonly used to access the state or functionality provided by a provider within a widget.
+// // context.watch() and context.read() are methods provided by the Provider package in Flutter that
+// // allow you to access the nearest instance of a provider in the widget tree. context.watch() is used to listen for changes to the provider's value and rebuild the widget when it changes, while context.read() is used to access the provider's value without listening for changes. When you call context.watch<T>(), it looks up the widget tree for the nearest ancestor that provides an instance of type T and returns it, and rebuilds the widget whenever that value changes. When you call context.read<T>(), it also looks up the widget tree for the nearest ancestor that provides an instance of type T and returns it, but does not rebuild the widget when that value changes. These methods are commonly used to access the state or functionality provided by a provider within a widget, with context.watch() being used when you want to react to changes in the provider's value, and context.read() being used when you only need to access the value without reacting to changes.
+//Provider.of is a method provided by the Provider package in Flutter that allows you to access the nearest instance of a provider in the widget tree.
+// // It is used to retrieve the current value of a provider and listen for changes to that value.
+// // When you call Provider.of<T>(context), it looks up the widget tree for the nearest ancestor that provides an instance of type T and returns it.
+// // If no such provider is found, it throws an error.
+// // This method is commonly used to access the state or functionality provided by a provider within a widget.
+// // 
+// class _MainAppState extends State<MainApp> {
+//   @override
+//   Widget build(BuildContext context) {
+//     // var model = Provider.of<Model>(context);
+//     return ChangeNotifierProvider(create:   (context) => Model(),
+//     child: MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: Scaffold(
+//         body: WidgetChild(),
+//       ),
+//     ),);
+//   }
+// }
+
+// // Lesson 8 : Provider vs ChangeNotifierProvider :
+// // Provider is a more general-purpose widget that can be used to provide any type of value, while ChangeNotifierProvider is specifically designed to work with ChangeNotifier classes. 
+// //ChangeNotifierProvider automatically listens for changes in the provided ChangeNotifier and rebuilds the dependent widgets when a change occurs, while Provider does not have this built-in functionality and requires manual handling of state changes. 
+// //In summary, ChangeNotifierProvider is a convenient wrapper around Provider that simplifies the process of working with ChangeNotifier classes and provides automatic updates to dependent widgets when the state changes.
+// class _MainAppState extends State<MainApp> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Provider<MyModel>(
+//       create: (context) => MyModel(),
+//       child:
+//       MaterialApp(
+//         debugShowCheckedModeBanner: false,
+//         home:  Scaffold(
+//           body:
+//               ListView(
+//               children:
+//                <Widget>[
+//                 Consumer<MyModel>(
+//                   builder:   (context, myModel, child){
+//                   print("Selector1 is building");
+//                   return Text(myModel.showSomething);
+//                 }),
+//                 Consumer<MyModel>(
+//                   builder: (context,myModel,child){
+//                   print("Selector2 is building");
+//                   return Text(myModel.showSomething2);
+//                 }),
+//                 Consumer<MyModel>(builder: (context,myModel,child){
+//                   // print("Consumerbutton is building");
+//                   return ElevatedButton(onPressed:(){
+//                   print(myModel.showSomething);
+//                     myModel.dosomething();
+//                   },child: Text("Do Something : "+ myModel.showSomething));
+//                 }),
+//                 Consumer<MyModel>(builder: (context,myModel,child){
+//                   // print("Consumerbutton is building");
+//                   return ElevatedButton(onPressed:(){
+//                   print(  myModel.showSomething2);
+//                     myModel.dosomething2();
+//                   },child: Text("Do Something : "+ myModel.showSomething2));
+//                 }),
+//                ],
+
+//             )
+//           ),
+//         ),
+//       );
+
+//   }
+// }
+
+// class MyModel extends ChangeNotifier {
+//   String showSomething = 'show something';
+//   String showSomething2 = 'show something 2';
+// get showone => showSomething;
+// get showtow => showSomething2;
+
+//   dosomething(){
+//     showSomething = "yes provider is working";
+//     notifyListeners();
+//   }
+//   dosomething2(){
+//     showSomething2 = "yes provider2 is working";
+//     notifyListeners();
+//   }
+// }
+
+
+
 class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Column(
-          children: [
-            SizedBox(height: 100),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => MyModel()),
 
-            ChangeNotifierProvider(
-              create: (context) => Model(),
-              child: Center(child: Text("Hello, Provider!")),
-            ),
-            SizedBox(height: 20),
-            // //Consumer widget must be used inside the provider widget
-            // Consumer<Model>(
-            //   builder: (context, model, child) {
-            //     return Text(model.text);
-            //   },
-            // ),
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
-              onPressed: () {},
-              child: Text("Press Me"),
-            ),
-          ],
+      ],
+      child:
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home:  Scaffold(
+          body:
+              ListView(
+              children:
+               <Widget>[
+                Consumer<MyModel>(
+                  builder:   (context, myModel, child){
+                  print("Selector1 is building");
+                  return Text(myModel.showSomething);
+                }),
+                Consumer<MyModel>(
+                  builder: (context,myModel,child){
+                  print("Selector2 is building");
+                  return Text(myModel.showSomething2);
+                }),
+                Consumer<MyModel>(builder: (context,myModel,child){
+                  // print("Consumerbutton is building");
+                  return ElevatedButton(onPressed:(){
+                  print(myModel.showSomething);
+                    myModel.dosomething();
+                  },child: Text("Do Something : "+ myModel.showSomething));
+                }),
+                Consumer<MyModel>(builder: (context,myModel,child){
+                  // print("Consumerbutton is building");
+                  return ElevatedButton(onPressed:(){
+                  print(  myModel.showSomething2);
+                    myModel.dosomething2();
+                  },child: Text("Do Something : "+ myModel.showSomething2));
+                }),
+               ],
+
+            )
+          ),
         ),
-      ),
-    );
+      );
+
   }
 }
 
-class Model extends ChangeNotifier {
-  String text = 'Hello World';
-  changeName() {
-    text = 'Hello Flutter';
+class MyModel with ChangeNotifier {
+  String showSomething = 'show something';
+  String showSomething2 = 'show something 2';
+get showone => showSomething;
+get showtow => showSomething2;
+
+  dosomething(){
+    showSomething = "yes provider is working";
+    notifyListeners();
+  }
+  dosomething2(){
+    showSomething2 = "yes provider2 is working";
     notifyListeners();
   }
 }
